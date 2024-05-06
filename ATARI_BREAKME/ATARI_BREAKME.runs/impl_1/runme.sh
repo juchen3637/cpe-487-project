@@ -25,7 +25,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='C:/Users/jchen/Desktop/CPE 487/ATARI_BREAKME/ATARI_BREAKME.runs/impl_1'
+HD_PWD='C:/Users/jchen/Documents/GitHub/cpe-487-project/ATARI_BREAKME/ATARI_BREAKME.runs/impl_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log

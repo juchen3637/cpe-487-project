@@ -29,6 +29,13 @@ ARCHITECTURE Behavioral OF pong IS
     SIGNAL count : STD_LOGIC_VECTOR (20 DOWNTO 0);
     SIGNAL display : std_logic_vector (15 DOWNTO 0); -- value to be displayed
     SIGNAL led_mpx : STD_LOGIC_VECTOR (2 DOWNTO 0); -- 7-seg multiplexing clock
+    SIGNAL ball_y_out : STD_LOGIC_VECTOR (10 DOWNTO 0);
+    SIGNAL ball_x_out : STD_LOGIC_VECTOR (10 DOWNTO 0);
+    SIGNAL bsize_out : INTEGER;
+    SIGNAL flip_l : std_logic_VECTOR(14 DOWNTO 0);
+    SIGNAL flip_r : std_logic_VECTOR(14 DOWNTO 0);
+    SIGNAL flip_u : std_logic_VECTOR(14 DOWNTO 0);
+    SIGNAL flip_d : std_logic_VECTOR(14 DOWNTO 0);
     COMPONENT bat_n_ball IS
         PORT (
             v_sync : IN STD_LOGIC;
@@ -38,7 +45,14 @@ ARCHITECTURE Behavioral OF pong IS
             serve : IN STD_LOGIC;
             red : OUT STD_LOGIC;
             green : OUT STD_LOGIC;
-            blue : OUT STD_LOGIC
+            blue : OUT STD_LOGIC;
+            ball_y_out : OUT STD_LOGIC_VECTOR (10 DOWNTO 0);
+            ball_x_out : OUT STD_LOGIC_VECTOR (10 DOWNTO 0);
+            bsize_out : OUT INTEGER;
+            flip_l : in std_logic_VECTOR(14 DOWNTO 0);
+            flip_r : in std_logic_VECTOR(14 DOWNTO 0);
+            flip_u : in std_logic_VECTOR(14 DOWNTO 0);
+            flip_d : in std_logic_VECTOR(14 DOWNTO 0)
         );
     END COMPONENT;
     COMPONENT vga_sync IS
@@ -73,13 +87,21 @@ ARCHITECTURE Behavioral OF pong IS
     
     component level is
         PORT (
+            v_sync : IN STD_LOGIC;
             lvl_cnt : in std_logic_vector (5 downto 0);
             win : in std_logic;
             pixel_row : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
             pixel_col : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
             red : OUT STD_LOGIC;
             green : OUT STD_LOGIC;
-            blue : OUT STD_LOGIC
+            blue : OUT STD_LOGIC;
+            ball_y_out : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+            ball_x_out : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+            bsize_out : IN INTEGER;
+            flip_l : out std_logic_VECTOR(14 DOWNTO 0);
+            flip_r : out std_logic_VECTOR(14 DOWNTO 0);
+            flip_u : out std_logic_VECTOR(14 DOWNTO 0);
+            flip_d : out std_logic_VECTOR(14 DOWNTO 0)
         );
     end component;
     
@@ -105,7 +127,14 @@ BEGIN
         serve => btn0, 
         red => S_red, 
         green => S_green, 
-        blue => S_blue
+        blue => S_blue,
+        ball_y_out => ball_y_out,
+        ball_x_out => ball_x_out,
+        bsize_out => bsize_out,
+        flip_l => flip_l,
+        flip_r => flip_r,
+        flip_u => flip_u,
+        flip_d => flip_d
     );
     
     vga_driver : vga_sync
@@ -136,12 +165,20 @@ BEGIN
     );
     level1 : level
     PORT MAP (
+        v_sync => S_vsync,
         lvl_cnt => "000001",
         win => '0', -- this should be an output
         pixel_row => S_pixel_row,
         pixel_col => S_pixel_col,
         red => l_red, 
         green => l_green, 
-        blue => l_blue
+        blue => l_blue,
+        ball_y_out => ball_y_out,
+        ball_x_out => ball_x_out,
+        bsize_out => bsize_out,
+        flip_l => flip_l,
+        flip_r => flip_r,
+        flip_u => flip_u,
+        flip_d => flip_d
     );
 END Behavioral;

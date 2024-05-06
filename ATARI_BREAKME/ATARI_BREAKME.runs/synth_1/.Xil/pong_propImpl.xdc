@@ -1,4 +1,4 @@
-set_property SRC_FILE_INFO {cfile:{C:/Users/jchen/Desktop/CPE 487/ATARI_BREAKME/ATARI_BREAKME.srcs/constrs_1/new/pong.xdc} rfile:../../../ATARI_BREAKME.srcs/constrs_1/new/pong.xdc id:1} [current_design]
+set_property SRC_FILE_INFO {cfile:C:/Users/jchen/Documents/GitHub/cpe-487-project/ATARI_BREAKME/ATARI_BREAKME.srcs/constrs_1/new/pong.xdc rfile:../../../ATARI_BREAKME.srcs/constrs_1/new/pong.xdc id:1} [current_design]
 set_property src_info {type:XDC file:1 line:1 export:INPUT save:INPUT read:READ} [current_design]
 set_property -dict { PACKAGE_PIN E3 IOSTANDARD LVCMOS33 } [get_ports {clk_in}];
 set_property src_info {type:XDC file:1 line:4 export:INPUT save:INPUT read:READ} [current_design]

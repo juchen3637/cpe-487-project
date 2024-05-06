@@ -3,12 +3,12 @@
 # SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Mon May  6 15:34:53 2024
-# Process ID: 21256
-# Current directory: C:/Users/jchen/Desktop/CPE 487/ATARI_BREAKME/ATARI_BREAKME.runs/impl_1
+# Start of session at: Mon May  6 18:32:34 2024
+# Process ID: 4632
+# Current directory: C:/Users/jchen/Documents/GitHub/cpe-487-project/ATARI_BREAKME/ATARI_BREAKME.runs/impl_1
 # Command line: vivado.exe -log pong.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source pong.tcl -notrace
-# Log file: C:/Users/jchen/Desktop/CPE 487/ATARI_BREAKME/ATARI_BREAKME.runs/impl_1/pong.vdi
-# Journal file: C:/Users/jchen/Desktop/CPE 487/ATARI_BREAKME/ATARI_BREAKME.runs/impl_1\vivado.jou
+# Log file: C:/Users/jchen/Documents/GitHub/cpe-487-project/ATARI_BREAKME/ATARI_BREAKME.runs/impl_1/pong.vdi
+# Journal file: C:/Users/jchen/Documents/GitHub/cpe-487-project/ATARI_BREAKME/ATARI_BREAKME.runs/impl_1\vivado.jou
 # Running On: LAPTOP-63D4JAUF, OS: Windows, CPU Frequency: 2592 MHz, CPU Physical cores: 6, Host memory: 17041 MB
 #-----------------------------------------------------------
 source pong.tcl -notrace
