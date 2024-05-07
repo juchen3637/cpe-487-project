@@ -48,6 +48,7 @@ entity brick is
         ball_y_out : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
         ball_x_out : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
         bsize_out : IN INTEGER;
+        game_on : IN STD_LOGIC;
         flip_l : out std_logic;
         flip_r : out std_logic;
         flip_u : out std_logic;
@@ -60,8 +61,9 @@ end brick;
 architecture Behavioral of brick is
     SIGNAL alive : STD_LOGIC := '1';
     SIGNAL brick_on : std_logic;
-    SIGNAL brick_w : integer := 60;
-    SIGNAL brick_h : integer := 40;
+    SIGNAL brick_w : integer := 37;
+    SIGNAL brick_h : integer := 26;
+    SIGNAL flip : STD_lOGIC := '0';
     
 begin
     red <= NOT brick_on;
@@ -81,11 +83,15 @@ begin
        END PROCESS;
     check_collision : process is
     BEGIN
-        WAIT UNTIL rising_edge(v_sync);
+        WAIT UNTIL rising_edge(v_sync); 
         -- Bounce off Bottom of Brick
+        if game_on='1' and flip='1' then
+            alive <= '1';
+        end if;
+        flip <= NOT game_on;
         if alive = '1' then
             IF (ball_y_out + bsize_out/2) >= (brick_y - brick_h)
-            AND (ball_y_out - bsize_out/2) <= (brick_y - brick_h + 15) 
+            AND (ball_y_out - bsize_out/2) <= (brick_y - brick_h + 6) 
             AND (ball_x_out + bsize_out/2) >= (brick_x - brick_w)
             AND (ball_x_out - bsize_out/2) <= (brick_x + brick_w)  THEN -- bounce off top wall
                 flip_d <= '1';
@@ -94,7 +100,7 @@ begin
                 flip_d <= '0';
             end if;
             -- Bounce off Top of Brick
-            IF (ball_y_out + bsize_out/2) >= (brick_y + brick_h - 15)
+            IF (ball_y_out + bsize_out/2) >= (brick_y + brick_h - 6)
             AND (ball_y_out - bsize_out/2) <= (brick_y + brick_h) 
             AND (ball_x_out + bsize_out/2) >= (brick_x - brick_w)
             AND (ball_x_out - bsize_out/2) <= (brick_x + brick_w)  THEN -- bounce off top wall
@@ -107,7 +113,7 @@ begin
             IF (ball_y_out + bsize_out/2) >= (brick_y - brick_h)
             AND (ball_y_out - bsize_out/2) <= (brick_y + brick_h) 
             AND (ball_x_out + bsize_out/2) >= (brick_x - brick_w)
-            AND (ball_x_out - bsize_out/2) <= (brick_x - brick_w + 15)  THEN -- bounce off top wall
+            AND (ball_x_out - bsize_out/2) <= (brick_x - brick_w + 6)  THEN -- bounce off top wall
                 flip_l <= '1';
                 alive <= '0';
             ELSE
@@ -116,7 +122,7 @@ begin
             -- Bounce off Right side of Brick
             IF (ball_y_out + bsize_out/2) >= (brick_y - brick_h)
             AND (ball_y_out - bsize_out/2) <= (brick_y + brick_h) 
-            AND (ball_x_out + bsize_out/2) >= (brick_x + brick_w - 15)
+            AND (ball_x_out + bsize_out/2) >= (brick_x + brick_w - 6)
             AND (ball_x_out - bsize_out/2) <= (brick_x + brick_w)  THEN -- bounce off top wall
                 flip_r <= '1';
                 alive <= '0';

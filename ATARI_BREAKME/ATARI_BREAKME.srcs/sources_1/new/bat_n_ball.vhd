@@ -10,25 +10,23 @@ ENTITY bat_n_ball IS
         pixel_col : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
         bat_x : IN STD_LOGIC_VECTOR (10 DOWNTO 0); -- current bat x position
         serve : IN STD_LOGIC; -- initiates serve
-        red : OUT STD_LOGIC;
-        green : OUT STD_LOGIC;
-        blue : OUT STD_LOGIC;
-        ball_y_out : OUT STD_LOGIC_VECTOR (10 DOWNTO 0);
-        ball_x_out : OUT STD_LOGIC_VECTOR (10 DOWNTO 0);
-        bsize_out : OUT INTEGER := 8;
-        flip_l : in std_logic_VECTOR(14 DOWNTO 0) := "000000000000000";
-        flip_r : in std_logic_VECTOR(14 DOWNTO 0) := "000000000000000";
-        flip_u : in std_logic_VECTOR(14 DOWNTO 0) := "000000000000000";
-        flip_d : in std_logic_VECTOR(14 DOWNTO 0) := "000000000000000"
+        red : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+        green : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+        blue : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+        game_on_out : OUT STD_LOGIC := '0'
     );
 END bat_n_ball;
 
 ARCHITECTURE Behavioral OF bat_n_ball IS
+    SIGNAL flip_l : STD_LOGIC_VECTOR(39 DOWNTO 0) := CONV_STD_LOGIC_VECTOR(0, 40);
+    SIGNAL flip_r : STD_LOGIC_VECTOR(39 DOWNTO 0) := CONV_STD_LOGIC_VECTOR(0, 40);
+    SIGNAL flip_u : STD_LOGIC_VECTOR(39 DOWNTO 0) := CONV_STD_LOGIC_VECTOR(0, 40);
+    SIGNAL flip_d : STD_LOGIC_VECTOR(39 DOWNTO 0) := CONV_STD_LOGIC_VECTOR(0, 40);
     CONSTANT bsize : INTEGER := 8; -- ball size in pixels
-    CONSTANT bat_w : INTEGER := 20; -- bat width in pixels
-    CONSTANT bat_h : INTEGER := 3; -- bat height in pixels
+    CONSTANT bat_w : INTEGER := 40; -- bat width in pixels
+    CONSTANT bat_h : INTEGER := 4; -- bat height in pixels
     -- distance ball moves each frame
-    CONSTANT ball_speed : STD_LOGIC_VECTOR (10 DOWNTO 0) := CONV_STD_LOGIC_VECTOR (3, 11);
+    CONSTANT ball_speed : STD_LOGIC_VECTOR (10 DOWNTO 0) := CONV_STD_LOGIC_VECTOR (4, 11);
     SIGNAL ball_on : STD_LOGIC; -- indicates whether ball is at current pixel position
     SIGNAL bat_on : STD_LOGIC; -- indicates whether bat at over current pixel position
     SIGNAL game_on : STD_LOGIC := '0'; -- indicates whether ball is in play
@@ -39,11 +37,32 @@ ARCHITECTURE Behavioral OF bat_n_ball IS
     CONSTANT bat_y : STD_LOGIC_VECTOR(10 DOWNTO 0) := CONV_STD_LOGIC_VECTOR(500, 11);
     -- current ball motion - initialized to (+ ball_speed) pixels/frame in both X and Y directions
     SIGNAL ball_x_motion, ball_y_motion : STD_LOGIC_VECTOR(10 DOWNTO 0) := ball_speed;
+    SIGNAL l_red, l_green, l_blue : STD_LOGIC;
+
+    component level is
+        PORT (
+            v_sync : IN STD_LOGIC;
+            lvl_cnt : in std_logic_vector (5 downto 0);
+            win : in std_logic;
+            pixel_row : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+            pixel_col : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+            red : OUT STD_LOGIC;
+            green : OUT STD_LOGIC;
+            blue : OUT STD_LOGIC;
+            ball_y_out : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+            ball_x_out : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+            bsize_out : IN INTEGER;
+            game_on : INOUT STD_LOGIC;
+            flip_l : out std_logic_VECTOR(39 DOWNTO 0);
+            flip_r : out std_logic_VECTOR(39 DOWNTO 0);
+            flip_u : out std_logic_VECTOR(39 DOWNTO 0);
+            flip_d : out std_logic_VECTOR(39 DOWNTO 0)
+        );
+    end component;
 BEGIN
-    red <= NOT bat_on; -- color setup for red ball and cyan bat on white background
-    green <= NOT ball_on;
-    blue <= NOT ball_on;
-    bsize_out <= bsize;
+    red <= NOT bat_on & l_red; -- color setup for red ball and cyan bat on white background
+    green <= NOT ball_on & l_green;
+    blue <= NOT ball_on & l_blue;
     -- process to draw round ball
     -- set ball_on if current pixel address is covered by ball position
     balldraw : PROCESS (ball_x, ball_y, pixel_row, pixel_col) IS
@@ -84,8 +103,6 @@ BEGIN
         VARIABLE temp : STD_LOGIC_VECTOR (11 DOWNTO 0);
     BEGIN
         WAIT UNTIL rising_edge(v_sync);
-        ball_x_out <= ball_x;
-        ball_y_out <= ball_y;
         IF serve = '1' AND game_on = '0' THEN -- test for new serve
             game_on <= '1';
             ball_y_motion <= (NOT ball_speed) + 1; -- set vspeed to (- ball_speed) pixels
@@ -102,23 +119,25 @@ BEGIN
             ball_x_motion <= ball_speed; -- set hspeed to (+ ball_speed) pixels
         END IF;
         -- allow for bounce off bat
-        IF (ball_x + bsize/2) >= (bat_x - bat_w) AND
+        IF (((ball_x + bsize/2) >= (bat_x - bat_w)) OR
+           (bat_w > bat_x and (ball_x + bsize/2) >= bat_x)) AND
          (ball_x - bsize/2) <= (bat_x + bat_w) AND
              (ball_y + bsize/2) >= (bat_y - bat_h) AND
              (ball_y - bsize/2) <= (bat_y + bat_h) THEN
                 ball_y_motion <= (NOT ball_speed) + 1; -- set vspeed to (- ball_speed) pixels
         END IF;
         -- Flipping off Bricks
-        if flip_l /= "000000000000000" then
+        if flip_l /= CONV_STD_LOGIC_VECTOR(0, 40) then
             ball_x_motion <= (NOT ball_speed) + 1;
-        elsif flip_r /= "000000000000000" then
+        elsif flip_r /= CONV_STD_LOGIC_VECTOR(0, 40) then
             ball_x_motion <= ball_speed;
         end if;
-        if flip_u /= "000000000000000" then
+        if flip_u /= CONV_STD_LOGIC_VECTOR(0, 40) then
             ball_y_motion <= ball_speed;
-        elsif flip_d /= "000000000000000" then
+        elsif flip_d /= CONV_STD_LOGIC_VECTOR(0, 40) then
             ball_y_motion <= (NOT ball_speed) + 1;
         end if;
+        game_on_out <= game_on;
         -- compute next ball vertical position
         -- variable temp adds one more bit to calculation to fix unsigned underflow problems
         -- when ball_y is close to zero and ball_y_motion is negative
@@ -138,4 +157,24 @@ BEGIN
         ELSE ball_x <= temp(10 DOWNTO 0);
         END IF;
     END PROCESS;
+    
+    level1 : level
+    PORT MAP (
+        v_sync => v_sync,
+        lvl_cnt => "000001",
+        win => '0', -- this should be an output
+        pixel_row => pixel_row,
+        pixel_col => pixel_col,
+        red => l_red, 
+        green => l_green, 
+        blue => l_blue,
+        ball_y_out => ball_y,
+        ball_x_out => ball_x,
+        bsize_out => bsize,
+        game_on => game_on,
+        flip_l => flip_l,
+        flip_r => flip_r,
+        flip_u => flip_u,
+        flip_d => flip_d
+    );
 END Behavioral;

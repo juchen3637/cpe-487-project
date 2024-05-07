@@ -22,7 +22,7 @@ END pong;
 ARCHITECTURE Behavioral OF pong IS
     SIGNAL pxl_clk : STD_LOGIC := '0'; -- 25 MHz clock to VGA sync module
     -- internal signals to connect modules
-    SIGNAL S_red, S_green, S_blue, l_red, l_green, l_blue : STD_LOGIC; --_VECTOR (3 DOWNTO 0);
+    SIGNAL S_red, S_green, S_blue: STD_LOGIC_VECTOR(1 DOWNTO 0); --_VECTOR (3 DOWNTO 0);
     SIGNAL S_vsync : STD_LOGIC;
     SIGNAL S_pixel_row, S_pixel_col : STD_LOGIC_VECTOR (10 DOWNTO 0);
     SIGNAL batpos : STD_LOGIC_VECTOR (10 DOWNTO 0); -- 9 downto 0
@@ -43,16 +43,10 @@ ARCHITECTURE Behavioral OF pong IS
             pixel_col : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
             bat_x : IN STD_LOGIC_VECTOR (10 DOWNTO 0);
             serve : IN STD_LOGIC;
-            red : OUT STD_LOGIC;
-            green : OUT STD_LOGIC;
-            blue : OUT STD_LOGIC;
-            ball_y_out : OUT STD_LOGIC_VECTOR (10 DOWNTO 0);
-            ball_x_out : OUT STD_LOGIC_VECTOR (10 DOWNTO 0);
-            bsize_out : OUT INTEGER;
-            flip_l : in std_logic_VECTOR(14 DOWNTO 0);
-            flip_r : in std_logic_VECTOR(14 DOWNTO 0);
-            flip_u : in std_logic_VECTOR(14 DOWNTO 0);
-            flip_d : in std_logic_VECTOR(14 DOWNTO 0)
+            red : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+            green : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+            blue : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+            game_on_out : OUT STD_LOGIC
         );
     END COMPONENT;
     COMPONENT vga_sync IS
@@ -85,35 +79,15 @@ ARCHITECTURE Behavioral OF pong IS
         );
     END COMPONENT; 
     
-    component level is
-        PORT (
-            v_sync : IN STD_LOGIC;
-            lvl_cnt : in std_logic_vector (5 downto 0);
-            win : in std_logic;
-            pixel_row : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
-            pixel_col : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
-            red : OUT STD_LOGIC;
-            green : OUT STD_LOGIC;
-            blue : OUT STD_LOGIC;
-            ball_y_out : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
-            ball_x_out : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
-            bsize_out : IN INTEGER;
-            flip_l : out std_logic_VECTOR(14 DOWNTO 0);
-            flip_r : out std_logic_VECTOR(14 DOWNTO 0);
-            flip_u : out std_logic_VECTOR(14 DOWNTO 0);
-            flip_d : out std_logic_VECTOR(14 DOWNTO 0)
-        );
-    end component;
-    
 BEGIN
     pos : PROCESS (clk_in) is
     BEGIN
         if rising_edge(clk_in) then
             count <= count + 1;
             IF (btnl = '1' and count = 0 and batpos > 0) THEN
-                batpos <= batpos - 10;
+                batpos <= batpos - 13;
             ELSIF (btnr = '1' and count = 0 and batpos < 800) THEN
-                batpos <= batpos + 10;
+                batpos <= batpos + 13;
             END IF;
         end if;
     END PROCESS;
@@ -127,22 +101,15 @@ BEGIN
         serve => btn0, 
         red => S_red, 
         green => S_green, 
-        blue => S_blue,
-        ball_y_out => ball_y_out,
-        ball_x_out => ball_x_out,
-        bsize_out => bsize_out,
-        flip_l => flip_l,
-        flip_r => flip_r,
-        flip_u => flip_u,
-        flip_d => flip_d
+        blue => S_blue
     );
     
     vga_driver : vga_sync
     PORT MAP(--instantiate vga_sync component
         pixel_clk => pxl_clk, 
-        red_in => S_red & l_red & "00", 
-        green_in => S_green & l_green & "00", 
-        blue_in => S_blue & l_blue & "00", 
+        red_in => S_red & "00", 
+        green_in => S_green & "00", 
+        blue_in => S_blue & "00", 
         red_out => VGA_red, 
         green_out => VGA_green, 
         blue_out => VGA_blue, 
@@ -162,23 +129,5 @@ BEGIN
     PORT MAP(
       dig => led_mpx, data => display, 
       anode => SEG7_anode, seg => SEG7_seg
-    );
-    level1 : level
-    PORT MAP (
-        v_sync => S_vsync,
-        lvl_cnt => "000001",
-        win => '0', -- this should be an output
-        pixel_row => S_pixel_row,
-        pixel_col => S_pixel_col,
-        red => l_red, 
-        green => l_green, 
-        blue => l_blue,
-        ball_y_out => ball_y_out,
-        ball_x_out => ball_x_out,
-        bsize_out => bsize_out,
-        flip_l => flip_l,
-        flip_r => flip_r,
-        flip_u => flip_u,
-        flip_d => flip_d
     );
 END Behavioral;
