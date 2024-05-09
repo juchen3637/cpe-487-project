@@ -107,9 +107,9 @@ BEGIN
     vga_driver : vga_sync
     PORT MAP(--instantiate vga_sync component
         pixel_clk => pxl_clk, 
-        red_in => S_red & "00", 
-        green_in => S_green & "00", 
-        blue_in => S_blue & "00", 
+        red_in => S_red & "11", 
+        green_in => S_green & "11", 
+        blue_in => S_blue & "11", 
         red_out => VGA_red, 
         green_out => VGA_green, 
         blue_out => VGA_blue, 

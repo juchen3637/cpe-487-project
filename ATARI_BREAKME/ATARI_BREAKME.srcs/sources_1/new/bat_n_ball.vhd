@@ -23,7 +23,7 @@ ARCHITECTURE Behavioral OF bat_n_ball IS
     SIGNAL flip_u : STD_LOGIC_VECTOR(39 DOWNTO 0) := CONV_STD_LOGIC_VECTOR(0, 40);
     SIGNAL flip_d : STD_LOGIC_VECTOR(39 DOWNTO 0) := CONV_STD_LOGIC_VECTOR(0, 40);
     CONSTANT bsize : INTEGER := 8; -- ball size in pixels
-    CONSTANT bat_w : INTEGER := 40; -- bat width in pixels
+    CONSTANT bat_w : INTEGER := 30; -- bat width in pixels
     CONSTANT bat_h : INTEGER := 4; -- bat height in pixels
     -- distance ball moves each frame
     CONSTANT ball_speed : STD_LOGIC_VECTOR (10 DOWNTO 0) := CONV_STD_LOGIC_VECTOR (4, 11);
@@ -38,6 +38,7 @@ ARCHITECTURE Behavioral OF bat_n_ball IS
     -- current ball motion - initialized to (+ ball_speed) pixels/frame in both X and Y directions
     SIGNAL ball_x_motion, ball_y_motion : STD_LOGIC_VECTOR(10 DOWNTO 0) := ball_speed;
     SIGNAL l_red, l_green, l_blue : STD_LOGIC;
+    SIGNAL bat_changer : INTEGER := 0;
 
     component level is
         PORT (
@@ -56,13 +57,15 @@ ARCHITECTURE Behavioral OF bat_n_ball IS
             flip_l : out std_logic_VECTOR(39 DOWNTO 0);
             flip_r : out std_logic_VECTOR(39 DOWNTO 0);
             flip_u : out std_logic_VECTOR(39 DOWNTO 0);
-            flip_d : out std_logic_VECTOR(39 DOWNTO 0)
+            flip_d : out std_logic_VECTOR(39 DOWNTO 0);
+            bat_x : IN STD_LOGIC_VECTOR (10 DOWNTO 0);
+            bat_changer_total : OUT INTEGER
         );
     end component;
 BEGIN
-    red <= NOT bat_on & l_red; -- color setup for red ball and cyan bat on white background
-    green <= NOT ball_on & l_green;
-    blue <= NOT ball_on & l_blue;
+    red <= ball_on & l_red; -- color setup for red ball and cyan bat on white background
+    green <= bat_on & l_green;
+    blue <= bat_on & l_blue;
     -- process to draw round ball
     -- set ball_on if current pixel address is covered by ball position
     balldraw : PROCESS (ball_x, ball_y, pixel_row, pixel_col) IS
@@ -89,8 +92,8 @@ BEGIN
     batdraw : PROCESS (bat_x, pixel_row, pixel_col) IS
         VARIABLE vx, vy : STD_LOGIC_VECTOR (10 DOWNTO 0); -- 9 downto 0
     BEGIN
-        IF ((pixel_col >= bat_x - bat_w) OR (bat_x <= bat_w)) AND
-         pixel_col <= bat_x + bat_w AND
+        IF ((pixel_col >= bat_x - (bat_w + bat_changer)) OR (bat_x <= (bat_w+bat_changer))) AND
+         pixel_col <= bat_x + (bat_w+bat_changer) AND
              pixel_row >= bat_y - bat_h AND
              pixel_row <= bat_y + bat_h THEN
                 bat_on <= '1';
@@ -103,6 +106,7 @@ BEGIN
         VARIABLE temp : STD_LOGIC_VECTOR (11 DOWNTO 0);
     BEGIN
         WAIT UNTIL rising_edge(v_sync);
+        game_on_out <= game_on;
         IF serve = '1' AND game_on = '0' THEN -- test for new serve
             game_on <= '1';
             ball_y_motion <= (NOT ball_speed) + 1; -- set vspeed to (- ball_speed) pixels
@@ -119,9 +123,9 @@ BEGIN
             ball_x_motion <= ball_speed; -- set hspeed to (+ ball_speed) pixels
         END IF;
         -- allow for bounce off bat
-        IF (((ball_x + bsize/2) >= (bat_x - bat_w)) OR
-           (bat_w > bat_x and (ball_x + bsize/2) >= bat_x)) AND
-         (ball_x - bsize/2) <= (bat_x + bat_w) AND
+        IF (((ball_x + bsize/2) >= (bat_x - (bat_w+bat_changer))) OR
+           ((bat_w+bat_changer) > bat_x and (ball_x + bsize/2) >= bat_x)) AND
+         (ball_x - bsize/2) <= (bat_x + (bat_w+bat_changer)) AND
              (ball_y + bsize/2) >= (bat_y - bat_h) AND
              (ball_y - bsize/2) <= (bat_y + bat_h) THEN
                 ball_y_motion <= (NOT ball_speed) + 1; -- set vspeed to (- ball_speed) pixels
@@ -137,7 +141,6 @@ BEGIN
         elsif flip_d /= CONV_STD_LOGIC_VECTOR(0, 40) then
             ball_y_motion <= (NOT ball_speed) + 1;
         end if;
-        game_on_out <= game_on;
         -- compute next ball vertical position
         -- variable temp adds one more bit to calculation to fix unsigned underflow problems
         -- when ball_y is close to zero and ball_y_motion is negative
@@ -175,6 +178,8 @@ BEGIN
         flip_l => flip_l,
         flip_r => flip_r,
         flip_u => flip_u,
-        flip_d => flip_d
+        flip_d => flip_d,
+        bat_x => bat_x,
+        bat_changer_total => bat_changer
     );
 END Behavioral;

@@ -1,24 +1,3 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 04/30/2024 01:30:00 PM
--- Design Name: 
--- Module Name: level - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
-
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.STD_LOGIC_ARITH.ALL;
@@ -50,7 +29,9 @@ entity level is
         flip_l : out std_logic_VECTOR(39 DOWNTO 0);
         flip_r : out std_logic_VECTOR(39 DOWNTO 0);
         flip_u : out std_logic_VECTOR(39 DOWNTO 0);
-        flip_d : out std_logic_VECTOR(39 DOWNTO 0)
+        flip_d : out std_logic_VECTOR(39 DOWNTO 0);
+        bat_x : IN STD_LOGIC_VECTOR (10 DOWNTO 0);
+        bat_changer_total : OUT INTEGER
     );
 end level;
 
@@ -60,12 +41,13 @@ architecture Behavioral of level is
     signal red1 : std_logic_vector(39 DOWNTO 0);
     signal green1 : std_logic_vector(39 DOWNTO 0);
     signal blue1 : std_logic_vector(39 DOWNTO 0);
+    type Integer_Vector is array (natural range <>) of integer;
+    signal int_vec : Integer_Vector(39 DOWNTO 0);
     component brick is
         port (
             v_sync : in std_logic;
             brick_x : IN std_logic_vector (10 DOWNTO 0);
             brick_y : IN std_logic_vector (10 DOWNTO 0);
-            power_up : IN std_logic;
             pixel_row : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
             pixel_col : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
             brick_alive : out std_logic;
@@ -79,7 +61,9 @@ architecture Behavioral of level is
             flip_l : out std_logic;
             flip_r : out std_logic;
             flip_u : out std_logic;
-            flip_d : out std_logic
+            flip_d : out std_logic;
+            bat_x : IN STD_LOGIC_VECTOR (10 DOWNTO 0);
+            bat_changer : OUT INTEGER
         );
     end component;
 begin
@@ -89,15 +73,14 @@ begin
            '1';
     blue <= '0' when blue1 = CONV_STD_LOGIC_VECTOR(0, 40) else
            '1';
+    bat_changer_total <= int_vec(0)+int_vec(1)+int_vec(2)+int_vec(3)+int_vec(4)+int_vec(5)+int_vec(6)+int_vec(7)+int_vec(8)+int_vec(9)+int_vec(10)+int_vec(11)+int_vec(12)+int_vec(13)+int_vec(14)+int_vec(15)+int_vec(16)+int_vec(17)+int_vec(18)+int_vec(19)+int_vec(20)+int_vec(21)+int_vec(22)+int_vec(23)+int_vec(24)+int_vec(25)+int_vec(26)+int_vec(27)+int_vec(28)+int_vec(29)+int_vec(30)+int_vec(31)+int_vec(32)+int_vec(33)+int_vec(34)+int_vec(35)+int_vec(36)+int_vec(37)+int_vec(38)+int_vec(39);
 brick1 : brick
 PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(49, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(50, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
-    brick_alive => l_brick_alive,
     red => red1(0),
     green => green1(0),
     blue => blue1(0),
@@ -108,14 +91,15 @@ PORT MAP (
     flip_l => flip_l(0),
     flip_r => flip_r(0),
     flip_u => flip_u(0),
-    flip_d => flip_d(0)
+    flip_d => flip_d(0),
+    bat_x => bat_x,
+    bat_changer => int_vec(0)
 );
 brick2 : brick
 PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(127, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(50, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -129,7 +113,9 @@ PORT MAP (
     flip_l => flip_l(1),
     flip_r => flip_r(1),
     flip_u => flip_u(1),
-    flip_d => flip_d(1)
+    flip_d => flip_d(1),
+    bat_x => bat_x,
+    bat_changer => int_vec(1)
 );
 
 brick3 : brick
@@ -137,7 +123,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(205, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(50, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -151,14 +136,15 @@ PORT MAP (
     flip_l => flip_l(2),
     flip_r => flip_r(2),
     flip_u => flip_u(2),
-    flip_d => flip_d(2)
+    flip_d => flip_d(2),
+    bat_x => bat_x,
+    bat_changer => int_vec(2)
 );
 brick4 : brick
 PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(283, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(50, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -172,7 +158,9 @@ PORT MAP (
     flip_l => flip_l(3),
     flip_r => flip_r(3),
     flip_u => flip_u(3),
-    flip_d => flip_d(3)
+    flip_d => flip_d(3),
+    bat_x => bat_x,
+    bat_changer => int_vec(3)
 );
 
 brick5 : brick
@@ -180,7 +168,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(361, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(50, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -194,7 +181,9 @@ PORT MAP (
     flip_l => flip_l(4),
     flip_r => flip_r(4),
     flip_u => flip_u(4),
-    flip_d => flip_d(4)
+    flip_d => flip_d(4),
+    bat_x => bat_x,
+    bat_changer => int_vec(4)
 );
 
 brick6 : brick
@@ -202,7 +191,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(439, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(50, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -216,7 +204,9 @@ PORT MAP (
     flip_l => flip_l(5),
     flip_r => flip_r(5),
     flip_u => flip_u(5),
-    flip_d => flip_d(5)
+    flip_d => flip_d(5),
+    bat_x => bat_x,
+    bat_changer => int_vec(5)
 );
 
 brick7 : brick
@@ -224,7 +214,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(517, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(50, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -238,7 +227,9 @@ PORT MAP (
     flip_l => flip_l(6),
     flip_r => flip_r(6),
     flip_u => flip_u(6),
-    flip_d => flip_d(6)
+    flip_d => flip_d(6),
+    bat_x => bat_x,
+    bat_changer => int_vec(6)
 );
 
 brick8 : brick
@@ -246,7 +237,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(595, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(50, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -260,7 +250,9 @@ PORT MAP (
     flip_l => flip_l(7),
     flip_r => flip_r(7),
     flip_u => flip_u(7),
-    flip_d => flip_d(7)
+    flip_d => flip_d(7),
+    bat_x => bat_x,
+    bat_changer => int_vec(7)
 );
 
 brick9 : brick
@@ -268,7 +260,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(673, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(50, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -282,7 +273,9 @@ PORT MAP (
     flip_l => flip_l(8),
     flip_r => flip_r(8),
     flip_u => flip_u(8),
-    flip_d => flip_d(8)
+    flip_d => flip_d(8),
+    bat_x => bat_x,
+    bat_changer => int_vec(8)
 );
 
 brick10 : brick
@@ -290,7 +283,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(751, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(50, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -304,7 +296,9 @@ PORT MAP (
     flip_l => flip_l(9),
     flip_r => flip_r(9),
     flip_u => flip_u(9),
-    flip_d => flip_d(9)
+    flip_d => flip_d(9),
+    bat_x => bat_x,
+    bat_changer => int_vec(9)
 );
 
 brick11 : brick
@@ -312,7 +306,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(49, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(106, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -326,14 +319,15 @@ PORT MAP (
     flip_l => flip_l(10),
     flip_r => flip_r(10),
     flip_u => flip_u(10),
-    flip_d => flip_d(10)
+    flip_d => flip_d(10),
+    bat_x => bat_x,
+    bat_changer => int_vec(10)
 );
 brick12 : brick
 PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(127, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(106, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -347,7 +341,9 @@ PORT MAP (
     flip_l => flip_l(11),
     flip_r => flip_r(11),
     flip_u => flip_u(11),
-    flip_d => flip_d(11)
+    flip_d => flip_d(11),
+    bat_x => bat_x,
+    bat_changer => int_vec(11)
 );
 
 brick13 : brick
@@ -355,7 +351,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(205, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(106, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -369,14 +364,15 @@ PORT MAP (
     flip_l => flip_l(12),
     flip_r => flip_r(12),
     flip_u => flip_u(12),
-    flip_d => flip_d(12)
+    flip_d => flip_d(12),
+    bat_x => bat_x,
+    bat_changer => int_vec(12)
 );
 brick14 : brick
 PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(283, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(106, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -390,7 +386,9 @@ PORT MAP (
     flip_l => flip_l(13),
     flip_r => flip_r(13),
     flip_u => flip_u(13),
-    flip_d => flip_d(13)
+    flip_d => flip_d(13),
+    bat_x => bat_x,
+    bat_changer => int_vec(13)
 );
 
 brick15 : brick
@@ -398,7 +396,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(361, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(106, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -412,7 +409,9 @@ PORT MAP (
     flip_l => flip_l(14),
     flip_r => flip_r(14),
     flip_u => flip_u(14),
-    flip_d => flip_d(14)
+    flip_d => flip_d(14),
+    bat_x => bat_x,
+    bat_changer => int_vec(14)
 );
 
 brick16 : brick
@@ -420,7 +419,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(439, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(106, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -434,7 +432,9 @@ PORT MAP (
     flip_l => flip_l(15),
     flip_r => flip_r(15),
     flip_u => flip_u(15),
-    flip_d => flip_d(15)
+    flip_d => flip_d(15),
+    bat_x => bat_x,
+    bat_changer => int_vec(15)
 );
 
 brick17 : brick
@@ -442,7 +442,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(517, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(106, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -456,7 +455,9 @@ PORT MAP (
     flip_l => flip_l(16),
     flip_r => flip_r(16),
     flip_u => flip_u(16),
-    flip_d => flip_d(16)
+    flip_d => flip_d(16),
+    bat_x => bat_x,
+    bat_changer => int_vec(16)
 );
 
 brick18 : brick
@@ -464,7 +465,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(595, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(106, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -478,7 +478,9 @@ PORT MAP (
     flip_l => flip_l(17),
     flip_r => flip_r(17),
     flip_u => flip_u(17),
-    flip_d => flip_d(17)
+    flip_d => flip_d(17),
+    bat_x => bat_x,
+    bat_changer => int_vec(17)
 );
 
 brick19 : brick
@@ -486,7 +488,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(673, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(106, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -500,7 +501,9 @@ PORT MAP (
     flip_l => flip_l(18),
     flip_r => flip_r(18),
     flip_u => flip_u(18),
-    flip_d => flip_d(18)
+    flip_d => flip_d(18),
+    bat_x => bat_x,
+    bat_changer => int_vec(18)
 );
 
 brick20 : brick
@@ -508,7 +511,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(751, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(106, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -522,7 +524,9 @@ PORT MAP (
     flip_l => flip_l(19),
     flip_r => flip_r(19),
     flip_u => flip_u(19),
-    flip_d => flip_d(19)
+    flip_d => flip_d(19),
+    bat_x => bat_x,
+    bat_changer => int_vec(19)
 );
 
 brick21 : brick
@@ -530,7 +534,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(49, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(162, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -544,14 +547,15 @@ PORT MAP (
     flip_l => flip_l(20),
     flip_r => flip_r(20),
     flip_u => flip_u(20),
-    flip_d => flip_d(20)
+    flip_d => flip_d(20),
+    bat_x => bat_x,
+    bat_changer => int_vec(20)
 );
 brick22 : brick
 PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(127, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(162, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -565,7 +569,9 @@ PORT MAP (
     flip_l => flip_l(21),
     flip_r => flip_r(21),
     flip_u => flip_u(21),
-    flip_d => flip_d(21)
+    flip_d => flip_d(21),
+    bat_x => bat_x,
+    bat_changer => int_vec(21)
 );
 
 brick23 : brick
@@ -573,7 +579,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(205, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(162, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -587,14 +592,15 @@ PORT MAP (
     flip_l => flip_l(22),
     flip_r => flip_r(22),
     flip_u => flip_u(22),
-    flip_d => flip_d(22)
+    flip_d => flip_d(22),
+    bat_x => bat_x,
+    bat_changer => int_vec(22)
 );
 brick24 : brick
 PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(283, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(162, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -608,7 +614,9 @@ PORT MAP (
     flip_l => flip_l(23),
     flip_r => flip_r(23),
     flip_u => flip_u(23),
-    flip_d => flip_d(23)
+    flip_d => flip_d(23),
+    bat_x => bat_x,
+    bat_changer => int_vec(23)
 );
 
 brick25 : brick
@@ -616,7 +624,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(361, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(162, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -630,7 +637,9 @@ PORT MAP (
     flip_l => flip_l(24),
     flip_r => flip_r(24),
     flip_u => flip_u(24),
-    flip_d => flip_d(24)
+    flip_d => flip_d(24),
+    bat_x => bat_x,
+    bat_changer => int_vec(24)
 );
 
 brick26 : brick
@@ -638,7 +647,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(439, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(162, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -652,7 +660,9 @@ PORT MAP (
     flip_l => flip_l(25),
     flip_r => flip_r(25),
     flip_u => flip_u(25),
-    flip_d => flip_d(25)
+    flip_d => flip_d(25),
+    bat_x => bat_x,
+    bat_changer => int_vec(25)
 );
 
 brick27 : brick
@@ -660,7 +670,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(517, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(162, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -674,7 +683,9 @@ PORT MAP (
     flip_l => flip_l(26),
     flip_r => flip_r(26),
     flip_u => flip_u(26),
-    flip_d => flip_d(26)
+    flip_d => flip_d(26),
+    bat_x => bat_x,
+    bat_changer => int_vec(26)
 );
 
 brick28 : brick
@@ -682,7 +693,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(595, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(162, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -696,7 +706,9 @@ PORT MAP (
     flip_l => flip_l(27),
     flip_r => flip_r(27),
     flip_u => flip_u(27),
-    flip_d => flip_d(27)
+    flip_d => flip_d(27),
+    bat_x => bat_x,
+    bat_changer => int_vec(27)
 );
 
 brick29 : brick
@@ -704,7 +716,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(673, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(162, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -718,7 +729,9 @@ PORT MAP (
     flip_l => flip_l(28),
     flip_r => flip_r(28),
     flip_u => flip_u(28),
-    flip_d => flip_d(28)
+    flip_d => flip_d(28),
+    bat_x => bat_x,
+    bat_changer => int_vec(28)
 );
 
 brick30 : brick
@@ -726,7 +739,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(751, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(162, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -740,7 +752,9 @@ PORT MAP (
     flip_l => flip_l(29),
     flip_r => flip_r(29),
     flip_u => flip_u(29),
-    flip_d => flip_d(29)
+    flip_d => flip_d(29),
+    bat_x => bat_x,
+    bat_changer => int_vec(29)
 );
 
 brick31 : brick
@@ -748,7 +762,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(49, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(218, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -762,14 +775,15 @@ PORT MAP (
     flip_l => flip_l(30),
     flip_r => flip_r(30),
     flip_u => flip_u(30),
-    flip_d => flip_d(30)
+    flip_d => flip_d(30),
+    bat_x => bat_x,
+    bat_changer => int_vec(30)
 );
 brick32 : brick
 PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(127, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(218, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -783,7 +797,9 @@ PORT MAP (
     flip_l => flip_l(31),
     flip_r => flip_r(31),
     flip_u => flip_u(31),
-    flip_d => flip_d(31)
+    flip_d => flip_d(31),
+    bat_x => bat_x,
+    bat_changer => int_vec(31)
 );
 
 brick33 : brick
@@ -791,7 +807,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(205, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(218, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -805,14 +820,15 @@ PORT MAP (
     flip_l => flip_l(32),
     flip_r => flip_r(32),
     flip_u => flip_u(32),
-    flip_d => flip_d(32)
+    flip_d => flip_d(32),
+    bat_x => bat_x,
+    bat_changer => int_vec(32)
 );
 brick34 : brick
 PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(283, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(218, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -826,7 +842,9 @@ PORT MAP (
     flip_l => flip_l(33),
     flip_r => flip_r(33),
     flip_u => flip_u(33),
-    flip_d => flip_d(33)
+    flip_d => flip_d(33),
+    bat_x => bat_x,
+    bat_changer => int_vec(33)
 );
 
 brick35 : brick
@@ -834,7 +852,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(361, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(218, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -848,7 +865,9 @@ PORT MAP (
     flip_l => flip_l(34),
     flip_r => flip_r(34),
     flip_u => flip_u(34),
-    flip_d => flip_d(34)
+    flip_d => flip_d(34),
+    bat_x => bat_x,
+    bat_changer => int_vec(34)
 );
 
 brick36 : brick
@@ -856,7 +875,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(439, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(218, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -870,7 +888,9 @@ PORT MAP (
     flip_l => flip_l(35),
     flip_r => flip_r(35),
     flip_u => flip_u(35),
-    flip_d => flip_d(35)
+    flip_d => flip_d(35),
+    bat_x => bat_x,
+    bat_changer => int_vec(35)
 );
 
 brick37 : brick
@@ -878,7 +898,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(517, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(218, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -892,7 +911,9 @@ PORT MAP (
     flip_l => flip_l(36),
     flip_r => flip_r(36),
     flip_u => flip_u(36),
-    flip_d => flip_d(36)
+    flip_d => flip_d(36),
+    bat_x => bat_x,
+    bat_changer => int_vec(36)
 );
 
 brick38 : brick
@@ -900,7 +921,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(595, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(218, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -914,7 +934,9 @@ PORT MAP (
     flip_l => flip_l(37),
     flip_r => flip_r(37),
     flip_u => flip_u(37),
-    flip_d => flip_d(37)
+    flip_d => flip_d(37),
+    bat_x => bat_x,
+    bat_changer => int_vec(37)
 );
 
 brick39 : brick
@@ -922,7 +944,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(673, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(218, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -936,7 +957,9 @@ PORT MAP (
     flip_l => flip_l(38),
     flip_r => flip_r(38),
     flip_u => flip_u(38),
-    flip_d => flip_d(38)
+    flip_d => flip_d(38),
+    bat_x => bat_x,
+    bat_changer => int_vec(38)
 );
 
 brick40 : brick
@@ -944,7 +967,6 @@ PORT MAP (
     v_sync => v_sync,
     brick_x => CONV_STD_LOGIC_VECTOR(751, 11),
     brick_y => CONV_STD_LOGIC_VECTOR(218, 11),
-    power_up => '0',
     pixel_row => pixel_row,
     pixel_col => pixel_col,
     brick_alive => l_brick_alive,
@@ -958,7 +980,9 @@ PORT MAP (
     flip_l => flip_l(39),
     flip_r => flip_r(39),
     flip_u => flip_u(39),
-    flip_d => flip_d(39)
+    flip_d => flip_d(39),
+    bat_x => bat_x,
+    bat_changer => int_vec(39)
 );
 
 end Behavioral;

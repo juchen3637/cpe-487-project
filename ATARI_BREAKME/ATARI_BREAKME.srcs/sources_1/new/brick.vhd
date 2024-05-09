@@ -1,47 +1,16 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 04/30/2024 01:10:12 PM
--- Design Name: 
--- Module Name: brick - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
-
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.STD_LOGIC_ARITH.ALL;
 USE IEEE.STD_LOGIC_UNSIGNED.ALL;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 entity brick is
     PORT (
         v_sync : IN STD_LOGIC;
         brick_x : IN std_logic_vector (10 DOWNTO 0);
         brick_y : IN std_logic_vector (10 DOWNTO 0);
-        power_up : IN std_logic;
         pixel_row : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
         pixel_col : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
-        brick_alive : out std_logic;
+        brick_alive : out std_logic := '1';
         red : OUT STD_LOGIC;
         green : OUT STD_LOGIC;
         blue : OUT STD_LOGIC;
@@ -52,7 +21,9 @@ entity brick is
         flip_l : out std_logic;
         flip_r : out std_logic;
         flip_u : out std_logic;
-        flip_d : out std_logic
+        flip_d : out std_logic;
+        bat_x : IN STD_LOGIC_VECTOR (10 DOWNTO 0);
+        bat_changer : OUT INTEGER
     );
     
     
@@ -64,11 +35,13 @@ architecture Behavioral of brick is
     SIGNAL brick_w : integer := 37;
     SIGNAL brick_h : integer := 26;
     SIGNAL flip : STD_lOGIC := '0';
-    
+    SIGNAL red_pu, green_pu, blue_pu : STD_LOGIC;
+    SIGNAL choice : INTEGER := -1;
+    SIGNAL count: INTEGER := 0;
 begin
-    red <= NOT brick_on;
-    green <= brick_on;
-    blue <= brick_on;
+    red <= red_pu or '0';
+    green <= green_pu or '0';
+    blue <= brick_on or blue_pu;
     brick_draw : process (brick_x, brick_y, pixel_row, pixel_col) is
     BEGIN 
         IF ((pixel_col >= brick_x - brick_w) OR (brick_x <= brick_w)) AND
@@ -87,6 +60,8 @@ begin
         -- Bounce off Bottom of Brick
         if game_on='1' and flip='1' then
             alive <= '1';
+            brick_alive <= '1';
+            choice <= -1;
         end if;
         flip <= NOT game_on;
         if alive = '1' then
@@ -96,6 +71,7 @@ begin
             AND (ball_x_out - bsize_out/2) <= (brick_x + brick_w)  THEN -- bounce off top wall
                 flip_d <= '1';
                 alive <= '0';
+                brick_alive <= '0';
             ELSE
                 flip_d <= '0';
             end if;
@@ -106,6 +82,7 @@ begin
             AND (ball_x_out - bsize_out/2) <= (brick_x + brick_w)  THEN -- bounce off top wall
                 flip_u <= '1';
                 alive <= '0';
+                brick_alive <= '0';
             ELSE
                 flip_u <= '0';
             end if;
@@ -116,6 +93,7 @@ begin
             AND (ball_x_out - bsize_out/2) <= (brick_x - brick_w + 6)  THEN -- bounce off top wall
                 flip_l <= '1';
                 alive <= '0';
+                brick_alive <= '0';
             ELSE
                 flip_l <= '0';
             end if;
@@ -126,6 +104,7 @@ begin
             AND (ball_x_out - bsize_out/2) <= (brick_x + brick_w)  THEN -- bounce off top wall
                 flip_r <= '1';
                 alive <= '0';
+                brick_alive <= '0';
             ELSE
                 flip_r <= '0';
             end if;
@@ -134,6 +113,15 @@ begin
             flip_r <= '0';
             flip_u <= '0';
             flip_d <= '0';
+        end if;
+        count <= (count+1) mod 4;
+        if alive = '0' and choice=-1 then
+            choice <= count;
+        end if;
+        if choice=1 then
+            bat_changer <= 2;
+        elsif choice=2 then
+            bat_changer <= -2;
         end if;
     End process;
 end Behavioral;
