@@ -27,7 +27,7 @@ ARCHITECTURE Behavioral OF bat_n_ball IS
     SIGNAL bat_w : INTEGER := 35; -- bat width in pixels
     CONSTANT bat_h : INTEGER := 4; -- bat height in pixels
     -- distance ball moves each frame
-    SIGNAL ball_speed : STD_LOGIC_VECTOR (10 DOWNTO 0) := CONV_STD_LOGIC_VECTOR (4, 11);
+    SIGNAL ball_speed : STD_LOGIC_VECTOR (10 DOWNTO 0) := CONV_STD_LOGIC_VECTOR (3, 11);
     SIGNAL ball_on : STD_LOGIC; -- indicates whether ball is at current pixel position
     SIGNAL bat_on : STD_LOGIC; -- indicates whether bat at over current pixel position
     SIGNAL game_on : STD_LOGIC := '0'; -- indicates whether ball is in play
@@ -65,7 +65,7 @@ ARCHITECTURE Behavioral OF bat_n_ball IS
     end component;
 BEGIN
     ball_speed <= CONV_STD_LOGIC_VECTOR (5, 11) when hard_mode='1' else
-                  CONV_STD_LOGIC_VECTOR (4, 11);
+                  CONV_STD_LOGIC_VECTOR (3, 11);
     bat_w <= 25 when hard_mode='1' else
              35;
     red <= ball_on & l_red; -- color setup for red ball and cyan bat on white background

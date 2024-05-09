@@ -30,13 +30,6 @@ ARCHITECTURE Behavioral OF pong IS
     SIGNAL count : STD_LOGIC_VECTOR (20 DOWNTO 0);
     SIGNAL display : std_logic_vector (15 DOWNTO 0); -- value to be displayed
     SIGNAL led_mpx : STD_LOGIC_VECTOR (2 DOWNTO 0); -- 7-seg multiplexing clock
-    SIGNAL ball_y_out : STD_LOGIC_VECTOR (10 DOWNTO 0);
-    SIGNAL ball_x_out : STD_LOGIC_VECTOR (10 DOWNTO 0);
-    SIGNAL bsize_out : INTEGER;
-    SIGNAL flip_l : std_logic_VECTOR(14 DOWNTO 0);
-    SIGNAL flip_r : std_logic_VECTOR(14 DOWNTO 0);
-    SIGNAL flip_u : std_logic_VECTOR(14 DOWNTO 0);
-    SIGNAL flip_d : std_logic_VECTOR(14 DOWNTO 0);
     COMPONENT bat_n_ball IS
         PORT (
             v_sync : IN STD_LOGIC;
