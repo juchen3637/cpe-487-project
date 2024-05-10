@@ -13,6 +13,7 @@ In order to run this program, you must download the ten source files from https:
 # Inputs & Outputs
 For our inputs, we have BTNL, BTNC, and BTNR as our button inputs, hard_mode as J15 switch input, and we have the VGA screen and the leddec display as outputs. 
 # Images/Videos
+
 # Modifications
   ## Pong Modifications:
   In the pong.vhd file, we added the switch input as the variable named "hard_mode" and added the anode and segment arrays as inputs as well. We also include the buttons BTNL and BTNR as inputs for later moving our bat left and right. We also added the component and proper signals needed for the leddec16 display to work. We changed the speed of the bat movement from adding/subtracting 10 to 13 so that the bat would move faster when pushing the buttons. We changed the signals "S_red", "S_green", and "S_blue" to be two bits instead of 1 and in the vga_sync instance, we had them & with "11" instead of "000" to give the screen a brighter look. 
