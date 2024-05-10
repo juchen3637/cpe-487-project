@@ -13,6 +13,7 @@ In order to run this program, you must download the ten source files from https:
 # Inputs & Outputs
 For our inputs, we have BTNL, BTNC, and BTNR as our button inputs, hard_mode as J15 switch input, and we have the VGA screen and the leddec display as outputs. 
 # Images/Videos
+# Modifications
   ## Pong Modifications:
   In the pong.vhd file, we added the switch input as the variable named "hard_mode" and added the anode and segment arrays as inputs as well. We also include the buttons BTNL and BTNR as inputs for later moving our bat left and right. We also added the component and proper signals needed for the leddec16 display to work. We changed the speed of the bat movement from adding/subtracting 10 to 13 so that the bat would move faster when pushing the buttons. We changed the signals "S_red", "S_green", and "S_blue" to be two bits instead of 1 and in the vga_sync instance, we had them & with "11" instead of "000" to give the screen a brighter look. 
   ## Bat_n_ball Modifications:
@@ -23,6 +24,7 @@ For our inputs, we have BTNL, BTNC, and BTNR as our button inputs, hard_mode as 
   brick.vhd is another newly created file and sends signals between "level.vhd" and "power_up.vhd". It's primary goals are to draw a brick on the screen given inputted coordinates, and check for a collision with the ball in which the drawn brick will disappear. It sends appropriate signals to "level.vhd" (and later to bat_n_ball) to signify which part of the brick was hit and therefore which direction the ball should bounce. It takes in inputs from "level.vhd" (and bat_n_ball) for knowing when game_on='1' so that the brick can get redrawn when the game restarts. "brick.vhd" also outputs an "alive" signal to "power_up.vhd" which is used for spawning in the power ups later. "brick.vhd"'s color outputs are "or"ed with the color output of "power_up.vhd". In other words, both use the same bit to draw to the screen and if either one is active, the the color outputted will be active.
   ## Power_up Modifications:
   power_up.vhd is also a new file that was created as a child of "brick.vhd". It's focus is to see when the brick gets destroyed and checks to see if it contains a good power up, a bad power up, or neither. If it does contain a power up, a colored ball will spawn from the position of where the brick was and will slowly fall to the bottom of the screen. The color of the ball reflects whether or not the power up is good or bad. The ball is drawn using the same process as "ball_draw" from the "bat_n_ball.vhd" file. If the bat touches the power up, then it will disappear and the bat will output the correct signal as "bat_changer" to tell bat_n_ball to modify the bat width correctly. If the power up does not get picked up and touches the bottom of the screen, then it will disappear and not activate.
-# Modifications
+## pong.xdc Modifications:
+  Added J15 switch input as the name "hard_mode". This is used in "bat_n_ball" for determining the speed of the ball and initial width of the bat.
 
 # Summary
