@@ -6,7 +6,7 @@ Remake of Atari Breakout utilizing VHDL & Nexys A7 100-T board, referencing sour
 Utilizing these alternate files to use BTNL and BTNR buttons on board to move the bat rather than a potentiometer
 
 # Block Diagram
-[block_diagram](https://github.com/juchen3637/cpe-487-project/blob/main/487%20Block%20Diagram.png)
+![block_diagram](https://github.com/juchen3637/cpe-487-project/blob/main/487%20Block%20Diagram.png)
 
 # Expected behavior
 After connecting the board to a power source and monitor via a VGA to HDMI adapter, the screen should display a black background with a cyan bat and 40 red bricks. When pressing the BTNC button on the board the game should start by spawning a red ball that bounces off the bricks, sides of the screen, and bat. When the ball hits the bricks the bricks will become deleted. Certain bricks are modified to drop a power up that will slowly drop to the bottom. If the bat interacts with the power up, the bat's width will increase or decrease. Green power ups will increase the width by 5 pixels while red power ups will decrease the width by 5 pixels. The power ups are in the shape of a ball. The player can move the bat by using the buttons to the left and to the right of BTNC. Once all the bricks are broken, the game can only reset when the ball is dropped and the BTNC button is pressed again. Using the J15 switch, when turned on, will cause the game to be slightly harder by making the starting width of the bat twenty pixels less and the ball speed is faster.
