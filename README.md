@@ -11,7 +11,7 @@ After connecting the board to a power source and monitor via a VGA to HDMI adapt
 # Steps needed to run on board
 In order to run this program, you must download the (9) source files from https://github.com/juchen3637/cpe-487-project/tree/main/Atari_Breakout/Atari_Breakout.srcs/sources_1/imports/new and put them into a new Vivado project under the source files. You must also download the contraint file from https://github.com/juchen3637/cpe-487-project/tree/main/Atari_Breakout/Atari_Breakout.srcs/constrs_1/imports/new and move it into the Vivado under the constraint files. Lastly, you must have the board connected to a monitor using a VGA to HDMI adapter. Then generate the bitstream and program the device.
 # Inputs & Outputs
-For our inputs, we have BTNL, BTNC, and BTNR as our button inputs, hard_mode as J15 switch input, and we have the VGA screen and the leddec display as outputs. 
+For our inputs, we have BTNL, BTNC, and BTNR as our button inputs, hard_mode as J15 switch input, and we have the VGA screen and the leddec display as outputs. We added the J15 switch input as a way of turning on "hard_mode" in the game which increases the ball speed and sets the initial bat width 
 # Images/Videos
   Easy Mode Test Video (will need to download to see):
     https://github.com/juchen3637/cpe-487-project/blob/main/Easy_Mode_Test.mov
