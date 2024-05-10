@@ -1,7 +1,7 @@
 # CPE 487 Project (Atari Breakout)
 Authors: Justin Chen, Joseph Stefanoni
 
-Remake of Atari Breakout utilizing VHDL & Nexys A7 100-T board, referencing source code from https://github.com/byett/dsd/tree/CPE487-Spring2024/Nexys-A7/Lab-6
+Remake of Atari Breakout utilizing VHDL & Nexys A7 100-T board, referencing source code from (Lab 6) https://github.com/byett/dsd/tree/CPE487-Spring2024/Nexys-A7/Lab-6
 
 Utilizing these alternate files to use BTNL and BTNR buttons on board to move the bat rather than a potentiometer
 https://github.com/byett/dsd/tree/CPE487-Spring2024/Nexys-A7/Lab-6/Alternative
@@ -15,7 +15,7 @@ After connecting the board to a power source and monitor via a VGA to HDMI adapt
 # Steps needed to run on board
 In order to run this program, you must download the (9) source files from https://github.com/juchen3637/cpe-487-project/tree/main/Atari_Breakout/Atari_Breakout.srcs/sources_1/imports/new and put them into a new Vivado project under the source files. You must also download the contraint file from https://github.com/juchen3637/cpe-487-project/tree/main/Atari_Breakout/Atari_Breakout.srcs/constrs_1/imports/new and move it into the Vivado under the constraint files. Lastly, you must have the board connected to a monitor using a VGA to HDMI adapter. Then generate the bitstream and program the device.
 # Inputs & Outputs
-For our inputs, we have BTNL, BTNC, and BTNR as our button inputs, hard_mode as J15 switch input, and we have the VGA screen and the leddec display as outputs. We added the J15 switch input as a way of turning on "hard_mode" in the game which increases the ball speed and sets the initial bat width 
+For our inputs, we have BTNL, BTNC, and BTNR as our button inputs, hard_mode as J15 switch input, and we have the VGA screen and the leddec display as outputs. We added the J15 switch input as a way of turning on "hard_mode" in the game which increases the ball speed and decreases the initial bat width.
 # Images/Videos
   Easy Mode Test Video (will need to download to see):
     https://github.com/juchen3637/cpe-487-project/blob/main/Easy_Mode_Test.mov
@@ -23,6 +23,7 @@ For our inputs, we have BTNL, BTNC, and BTNR as our button inputs, hard_mode as 
   Hard Mode Test Video (will need to download to see):
     https://github.com/juchen3637/cpe-487-project/blob/main/Hard_Mode_Test.mov
 # Modifications
+  The starter code comes from Lab 6's pong project.
   ## Pong Modifications:
   In the pong.vhd file, we added the switch input as the variable named "hard_mode" and added the anode and segment arrays as inputs as well. We also include the buttons BTNL and BTNR as inputs for later moving our bat left and right. We also added the component and proper signals needed for the leddec16 display to work. We changed the speed of the bat movement from adding/subtracting 10 to 13 so that the bat would move faster when pushing the buttons. We changed the signals "S_red", "S_green", and "S_blue" to be two bits instead of 1 and in the vga_sync instance, we had them & with "11" instead of "000" to give the screen a brighter look. 
   ## Bat_n_ball Modifications:
