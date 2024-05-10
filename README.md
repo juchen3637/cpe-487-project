@@ -13,10 +13,10 @@ In order to run this program, you must download the ten source files from https:
 # Inputs & Outputs
 For our inputs, we have BTNL, BTNC, and BTNR as our button inputs, hard_mode as J15 switch input, and we have the VGA screen and the leddec display as outputs. 
 # Images/Videos
-  Easy Mode Test Video:
+  Easy Mode Test Video (Will Need to Download to See):
     https://github.com/juchen3637/cpe-487-project/blob/main/Easy_Mode_Test.mov
     
-  Hard Mode Test Video:
+  Hard Mode Test Video (Will Need to Download to See):
     https://github.com/juchen3637/cpe-487-project/blob/main/Hard_Mode_Test.mov
 # Modifications
   ## Pong Modifications:
