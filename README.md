@@ -30,6 +30,6 @@ For our inputs, we have BTNL, BTNC, and BTNR as our button inputs, hard_mode as 
   ## Power_up Modifications:
   power_up.vhd is also a new file that was created as a child of "brick.vhd". It's focus is to see when the brick gets destroyed and checks to see if it contains a good power up, a bad power up, or neither. If it does contain a power up, a colored ball will spawn from the position of where the brick was and will slowly fall to the bottom of the screen. The color of the ball reflects whether or not the power up is good or bad. The ball is drawn using the same process as "ball_draw" from the "bat_n_ball.vhd" file. If the bat touches the power up, then it will disappear and the bat will output the correct signal as "bat_changer" to tell bat_n_ball to modify the bat width correctly. If the power up does not get picked up and touches the bottom of the screen, then it will disappear and not activate.
 ## pong.xdc Modifications:
-  Added J15 switch input as the name "hard_mode". This is used in "bat_n_ball" for determining the speed of the ball and initial width of the bat.
+  Added J15 switch input as the name "hard_mode". This is used in "bat_n_ball" for determining the speed of the ball and initial width of the bat. Also added the anodes and segments used in the leddec16 display file.
 
 # Summary
