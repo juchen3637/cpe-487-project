@@ -15,6 +15,7 @@ For our inputs, we have BTNL, BTNC, and BTNR as our button inputs, hard_mode as 
 # Images/Videos
   Easy Mode Test Video:
     https://github.com/juchen3637/cpe-487-project/blob/main/Easy_Mode_Test.mov
+    
   Hard Mode Test Video:
     https://github.com/juchen3637/cpe-487-project/blob/main/Hard_Mode_Test.mov
 # Modifications
