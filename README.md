@@ -4,6 +4,7 @@ Authors: Justin Chen, Joseph Stefanoni
 Remake of Atari Breakout utilizing VHDL & Nexys A7 100-T board, referencing source code from https://github.com/byett/dsd/tree/CPE487-Spring2024/Nexys-A7/Lab-6
 
 Utilizing these alternate files to use BTNL and BTNR buttons on board to move the bat rather than a potentiometer
+https://github.com/byett/dsd/tree/CPE487-Spring2024/Nexys-A7/Lab-6/Alternative
 
 # Block Diagram
 ![block_diagram](https://github.com/juchen3637/cpe-487-project/blob/main/487%20Block%20Diagram.png)
